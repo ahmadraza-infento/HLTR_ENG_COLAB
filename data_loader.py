@@ -13,7 +13,7 @@ import os
 import cv2
 import numpy as np
 
-from .sample_preprocessor import preprocessor
+from sample_preprocessor import preprocessor
 
 
 class Sample:
@@ -35,18 +35,15 @@ class Batch:
 class DataLoader:
     "loads data which corresponds to IAM format, see: http://www.fki.inf.unibe.ch/databases/iam-handwriting-database"
 
-    def __init__(self, filePath, batchSize, imgSize, maxTextLen, load_aug=True):
+    def __init__(self, imgDir, labelFile, batchSize, imgSize, maxTextLen, load_aug=True):
         "loader for dataset at given location, preprocess images and text according to parameters"
-
-        assert filePath[-1] == '/'
-
         self.dataAugmentation = True # False
         self.currIdx = 0
         self.batchSize = batchSize
         self.imgSize = imgSize
         self.samples = []
 
-        f = open(filePath + 'lines.txt')
+        f = open(labelFile)
         chars = set()
         bad_samples = []
         bad_samples_reference = ['a01-117-05-02.png', 'r06-022-03-05.png']
@@ -62,9 +59,9 @@ class DataLoader:
             fileNameSplit = lineSplit[0].split('-')
             #print(fileNameSplit)
             try:
-                fileName = filePath + 'lines/' + lineSplit[0] + '.png'
+                fileName = os.path.join(imgDir, lineSplit[0] + '.png')
             except Exception as ex:
-                print("filePath: ", filePath)
+                print("imgDir: ", imgDir)
                 print("fileNameSplit: ", fileNameSplit)
                 print("lineSplit: ", lineSplit)
                 print("line: ", line)

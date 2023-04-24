@@ -2,7 +2,7 @@ import os
 import editdistance
 import tensorflow.compat.v1 as tf
 
-from .sample_preprocessor import wer
+from sample_preprocessor import wer
 
 
 def validate(model, loader):
